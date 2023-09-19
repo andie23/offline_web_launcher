@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Test app</title>
+        <script>
+            const header = document.getElementById("header")
+            async function getApiHost() {
+                const req = await fetch('api_port')
+                if (req.status === 200) {
+                    const res = await req.text()
+                    return `http://0.0.0.0:${res}`
+                }
+            }
+            async function getJson(url='/') {
+                const host = await getApiHost()
+                if (!host) throw "Unable to get host address"
+                const req = await fetch(`${host}${url}`, { method: "GET"})
+                if (req.status === 200) {
+                    return req.json()
+                }
+            }
+            function update() {
+                getJson().then((res) => console.log(res))
+            }
+            update()
+            setInterval(update, 10000)
+        </script>
+    </head>
+    <body>
+        <h1>Hello World</h1>
+    </body>
+</html>
